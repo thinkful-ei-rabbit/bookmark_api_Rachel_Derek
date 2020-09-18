@@ -3,11 +3,11 @@ const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
 const helmet = require('helmet');
+const bookRouter = require('./bookmarksRoute')
 
 
 const { NODE_ENV, API_TOKEN } = require('./config');
-const { bookmarks } = require('./mockData');
-let BOOKMARKS = bookmarks
+
 
 const app = express();
 
@@ -16,6 +16,9 @@ const morganOption = NODE_ENV === 'production' ? 'tiny' : 'common';
 app.use(morgan(morganOption));
 app.use(helmet());
 app.use(cors());
+app.use(express.json());
+
+app.use('/bookmarks', bookRouter)
 
 app.use('/', (req, res, next) => {
   const authToken = req.get('Authorization')
@@ -25,29 +28,7 @@ app.use('/', (req, res, next) => {
   next()
 })
 
-app.get('/bookmarks', (req, res) => {
-  res.json(BOOKMARKS);
-});
 
-app.get('/bookmarks/:id', (req, res) => {
-  const id = req.params.id
-
-  console.log(BOOKMARKS);
-
-  BOOKMARKS = BOOKMARKS.find(book => book.id === id)
-
-  res.json(BOOKMARKS);
-});
-
-app.post('/bookmarks', (req, res) => {
-
-  res.json(BOOKMARKS);
-});
-
-app.delete('/bookmarks/:id', (req, res) => {
-
-  res.json(BOOKMARKS);
-});
 
 
 app.use(function errorHandler(error, req, res, next) {
