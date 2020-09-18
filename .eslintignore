@@ -1,0 +1,10 @@
+# REACT Folders/Files
+build
+node_modules
+public
+*.json
+*.md
+*.test.js
+
+# ON/OFF switch
+# *

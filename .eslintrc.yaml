@@ -1,0 +1,24 @@
+parserOptions:
+  ecmaVersion: 6
+env:
+  browser: true
+  node: true
+# Use this for 3rd-party linter libraries
+# extends:
+  # - eslint-config-airbnb
+  # - airbnb
+  # - airbnb/hooks
+rules:
+  prefer-stateless-function: off
+  linebreak-style: 0
+  import/extensions: off
+  comma-dangle: 0
+  no-trailing-spaces: 0
+# plugins:
+#   - import
+settings:
+  import/parser: babel-eslint
+  import/resolve:
+    moduleDirectory:
+      - node_modules
+      - src
