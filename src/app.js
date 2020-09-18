@@ -5,9 +5,8 @@ const cors = require('cors');
 const helmet = require('helmet');
 const bookRouter = require('./bookmarksRoute')
 
-
 const { NODE_ENV, API_TOKEN } = require('./config');
-
+const errorHandler = require('./errorHandler');
 
 const app = express();
 
@@ -18,28 +17,17 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
-app.use('/bookmarks', bookRouter)
-
 app.use('/', (req, res, next) => {
   const authToken = req.get('Authorization')
+  logger.error(`Unauthorized request to path: ${req.path}`)
+
   if (!authToken || authToken.split(' ')[1] !== API_TOKEN) {
     return res.status(401).json({ error: 'Unauthorized request' })
   }
   next()
 })
 
-
-
-
-app.use(function errorHandler(error, req, res, next) {
-  let response;
-  if (NODE_ENV === 'production') {
-    response = { error: { message: 'server error' } };
-  } else {
-    console.error(error);
-    response = { message: error.message, error };
-  }
-  res.status(500).json(response);
-});
+app.use(errorHandler)
+app.use('/bookmarks', bookRouter)
 
 module.exports = app;
